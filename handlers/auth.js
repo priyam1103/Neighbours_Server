@@ -108,26 +108,26 @@ exports.SignIn = async function (req, res) {
         user_.verification.otp = Math.floor(100000 + Math.random() * 900000)
         await user_.save()
         // console.log(user_)
-        let testAccount = await nodemailer.createTestAccount();
-        let transporter = nodemailer.createTransport({
-          host: "smtp.gmail.com",
-          port: 25,
-          secure: false, 
-          auth: {
-            user: "priyampoddar89@gmail.com", 
-            pass: "YamVani24",
-          },
-          tls: {
-            rejectUnauthorized: false
-        }
-        });
-      //console.log(transporter)
-        let info = await transporter.sendMail({
-          from: '"Fred Foo 👻" <>', 
-          to: `${user_.emailId}`,
-          subject: "Neighbours OTP",
-          html: `<p style="font-weight:bold">Hello ${user_.username} your otp is ${user_.verification.otp}.</p>`, 
-        });
+      
+      //   let transporter = nodemailer.createTransport({
+      //     host: "smtp.gmail.com",
+      //     port: 25,
+      //     secure: false, 
+      //     auth: {
+      //       user: "priyampoddar89@gmail.com", 
+      //       pass: "YamVani24",
+      //     },
+      //     tls: {
+      //       rejectUnauthorized: false
+      //   }
+      //   });
+      // //console.log(transporter)
+      //   let info = await transporter.sendMail({
+      //     from: '"Fred Foo 👻" <>', 
+      //     to: `${user_.emailId}`,
+      //     subject: "Neighbours OTP",
+      //     html: `<p style="font-weight:bold">Hello ${user_.username} your otp is ${user_.verification.otp}.</p>`, 
+      //   });
       res
         .status(200)
         .json({ user_, message: "Sign Up Successfull" });

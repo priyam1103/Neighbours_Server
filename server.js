@@ -229,6 +229,7 @@ io.on('connection', async (socket) => {
     try {
       const id = socket.user.id;
     // console.log(id, "my")
+    
       const user = await Online.findOne({ ofUser: id });
       var current_user, current_iconn, i, current_incoming, current_index,current_outgoing;
     
@@ -236,7 +237,7 @@ io.on('connection', async (socket) => {
         
         const user_ = await User.findOne({ _id: id });
         
-
+      if (user) {
         new Promise(async (resolve, reject) => {
 
           await user_.outgoingConnections.map(async (item, index) => {
@@ -254,16 +255,16 @@ io.on('connection', async (socket) => {
               }
             }
             if (current_index != -1) {
-            // console.log(current_incoming[current_index], "accept");
+              // console.log(current_incoming[current_index], "accept");
               await current_incoming.splice(current_index, 1)
              
-               current_user.connectionRequests = null;
+              current_user.connectionRequests = null;
               current_user.incomingConnections = null;
-              current_iconn.splice(current_iconn.indexOf(user_.id),1)
-               current_user.incomingConnections = current_iconn;
+              current_iconn.splice(current_iconn.indexOf(user_.id), 1)
+              current_user.incomingConnections = current_iconn;
               current_user.connectionRequests = current_incoming;
               // await current_user.save();
-              await current_user.updateOne({ $set: { connectionRequests: current_incoming,incomingConnections:current_iconn } });
+              await current_user.updateOne({ $set: { connectionRequests: current_incoming, incomingConnections: current_iconn } });
             }
             io.to(current_user.socketId).emit("updateRequests", current_user)
            
@@ -280,7 +281,7 @@ io.on('connection', async (socket) => {
               current_outgoing.splice(current_outgoing.indexOf(user_.id), 1);
               await current_user.updateOne({ $set: { outgoingConnections: current_outgoing } });
               
-            io.to(current_user.socketId).emit("updateRequests", current_user)
+              io.to(current_user.socketId).emit("updateRequests", current_user)
             })
             resolve();
           }).then(() => {
@@ -300,15 +301,15 @@ io.on('connection', async (socket) => {
             }).then(async () => {
               await user.save();
               await user_.save();
-              io.to(user_.socketId).emit("getUser",user_)
+              io.to(user_.socketId).emit("getUser", user_)
             })
           })
         })
     
-    // console.log("succ")
+        // console.log("succ")
     
-      callback({ message: "success" })
-
+        callback({ message: "success" })
+      }
     } catch (err) {
       //console.log(err)
     }
