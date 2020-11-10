@@ -4,7 +4,7 @@ const {
   signUp,
   SignIn,
   verifyUser,
-  ResetPass,
+  
   ResetPassToken,
   ResetTokenVerify,
   me,
@@ -16,7 +16,7 @@ route.post("/signin", SignIn);
 route.post("/verify", verifyUser);
 route.post("/resetPassToken", ResetPassToken);
 route.get("/resetPassVerify/:resetToken", ResetTokenVerify);
-route.post("/resetPassword", ResetPass);
+
 route.get("/me", auth, me);
 route.post("/addDesc", description);
 
