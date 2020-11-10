@@ -40,12 +40,12 @@ function deg2rad(deg) {
 } 
 
 mongoose
-  .connect("mongodb://localhost:27017/codegeek1", { useNewUrlParser: true })
+  .connect("mongodb+srv://priyam1103:priyam7035@cluster0.cis4d.mongodb.net/Neighbours?retryWrites=true&w=majority", { useNewUrlParser: true })
     .then(() => console.log("connected"));
   
 require("./service/routes")(app);
 var job = new CronJob('*/30 * * * *', async function () {
-  
+
 
   var current_user, current_iconn, i, current_incoming, current_index, current_outgoing;
   
