@@ -1,5 +1,4 @@
 const User = require("../model/user");
-const bcrypt = require("bcrypt");
 const Mailer = require("../utils/Mailer");
 const Online = require("../model/online");
 const nodemailer = require("nodemailer");
@@ -200,33 +199,6 @@ exports.ResetTokenVerify = async function (req, res) {
         await user.save();
       } else {
         res.status(200).json({ status: true });
-      }
-    } else {
-      res.status(401).json({ message: "Invalid Link" });
-    }
-  } catch (err) {
-    res.status(400).json({ message: "Error occured" });
-  }
-};
-
-exports.ResetPass = async function (req, res) {
-  try {
-    const { resetToken, password } = req.body;
-    const user = await User.findOne({ "resetPassword.token": resetToken });
-    if (user) {
-      if (Date.now() > user.resetPassword.expiresIn) {
-        res.status(400).json({ message: "Reset Link Expired" });
-        user.ResetPassword = {};
-        await user.save();
-      } else {
-        const hashedpass = await bcrypt.hash(password, 10);
-
-        user.password = hashedpass;
-
-        user.resetPassword = {};
-
-        await user.save();
-        res.status(200).json({ message: "Reset done" });
       }
     } else {
       res.status(401).json({ message: "Invalid Link" });
