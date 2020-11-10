@@ -20,7 +20,7 @@ const User = require("./model/user");
 
 
 const { user } = require("./utils/Mailer");
-const port = 3006;
+const PORT = 3006;
 function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
   var R = 6371; // Radius of the earth in km
   var dLat = deg2rad(lat2-lat1);  // deg2rad below
@@ -771,5 +771,5 @@ app.get("/api/nearby", auth, async (req, res) => {
 })
 
 server.listen(port, () => {
-  console.log("listening to the port: " + port);
+  console.log("listening to the port: " + PORT);
 });
