@@ -770,6 +770,6 @@ app.get("/api/nearby", auth, async (req, res) => {
   }
 })
 
-server.listen(port, () => {
+server.listen(PORT, () => {
   console.log("listening to the port: " + PORT);
 });
