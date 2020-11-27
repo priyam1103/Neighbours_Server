@@ -38,7 +38,6 @@ function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
 function deg2rad(deg) {
   return deg * (Math.PI/180)
 } 
-
 mongoose
   .connect("mongodb+srv://priyam1103:priyam7035@cluster0.cis4d.mongodb.net/Neighbours?retryWrites=true&w=majority", { useNewUrlParser: true })
     .then(() => console.log("connected"));
@@ -765,7 +764,8 @@ app.get("/api/nearby", auth, async (req, res) => {
       ne.sort((a, b) => a.distance - b.distance)
   
       res.status(200).json({ ne })
-    }
+    }else
+    res.status(400).json({ message:"No online" })
   } catch (err) {
     res.status(400).json({ message: "Error occured" });
   }

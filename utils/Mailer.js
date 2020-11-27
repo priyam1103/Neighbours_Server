@@ -17,20 +17,19 @@ class Mailer {
         this.transport = nodemailer.createTransport({
           host: account.smtp.host,
           port: account.smtp.port,
-          secure: false,
+          secure: account.smtp.secure,
           auth: {
             user: account.user,
             pass: account.pass,
           },
         });
-        console.log(this.transport)
         this.user = account.user;
       });
     } else {
       this.transport = nodemailer.createTransport({
         host: config.TRANSPORT_HOST,
         port: config.TRANSPORT_PORT,
-        secure: false,
+        secure: true,
         auth: {
           user: config.TRANSPORT_AUTH_USER,
           pass: config.TRANSPORT_AUTH_PASS,
@@ -63,14 +62,12 @@ class Mailer {
    * @param {string} token
    */
   sendVerifyEmail(user, otp) {
-    console.log(user.emailId);
-    console.log(otp)
     return new Promise((resolve, reject) => {
       this.transport
         .sendMail({
           from: `"Mob Chat" <${this.user}>`,
           to: user.emailId,
-          subject: "Welcome to Neighbours! Please find your otp below",
+          subject: "Welcome to mobchat! Please find your otp below",
           text: `You're on your way! Let's confirm your email address.`,
           html: `<p>You otp is ${otp}</p>`,
         })

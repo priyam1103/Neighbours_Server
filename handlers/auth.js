@@ -41,6 +41,32 @@ exports.description = async function (req, res) {
           user_.verification.otp = Math.floor(100000 + Math.random() * 900000)
           await user_.save()
 // console.log(user_)
+let transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: "priyampoddar89@gmail.com",// generated ethereal user
+    pass: "YamVani24", // generated ethereal password
+  },
+  tls: {
+    rejectUnauthorized: false
+}
+});
+
+// send mail with defined transport object
+let info = await transporter.sendMail({
+  from: '"Neighbours 👻" <foo@example.com>', // sender address
+  to: `${user_.emailId}`, // list of receivers
+  subject: "Otp from neighbours", // Subject line
+  text: "Hello world?", // plain text body
+  html: `<p>Your otp for neighbours login is ${user_.verification.otp}</p>`, // html body
+});
+console.log("Message sent: %s", info.messageId);
+// Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+
+//await Mailer.sendVerifyEmail(user_, user_.verification.otp);
           res.status(200).json({ user_ });
          
         }
@@ -54,6 +80,7 @@ exports.description = async function (req, res) {
 exports.signUp = async function (req, res) {
   try {
     const { emailId, username, mobileNo } = req.body;
+    console.log(req.body)
     const user_email = await User.findOne({ emailId: emailId.trim() });
     const user_username = await User.findOne({ username: username.trim() });
     const user_mobileno = await User.findOne({ mobileNo: mobileNo.trim() });
@@ -62,6 +89,7 @@ exports.signUp = async function (req, res) {
     //     { mobileNo: mobileNo.trim() },
     //   ],
     // });
+   
     if(user_email){
        res.status(401).json({
         message: "Email id already exists"
@@ -89,6 +117,7 @@ res.status(401).json({
 // console.log(user_)
       
       //await Mailer.sendVerifyEmail(user_, user_.verification.otp);
+      
 
       res
         .status(200)
@@ -106,7 +135,37 @@ exports.SignIn = async function (req, res) {
     const user_ = await User.findOne({emailId:emailId.trim() });
     if (user_) {
         user_.verification.otp = Math.floor(100000 + Math.random() * 900000)
-        await user_.save()
+      await user_.save()
+      let testAccount = await nodemailer.createTestAccount();
+
+// create reusable transporter object using the default SMTP transport
+let transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: "priyampoddar89@gmail.com",// generated ethereal user
+    pass: "YamVani24", // generated ethereal password
+  },
+  tls: {
+    rejectUnauthorized: false
+}
+});
+
+// send mail with defined transport object
+let info = await transporter.sendMail({
+  from: '"Neighbours 👻" <foo@example.com>', // sender address
+  to: `${user_.emailId}`, // list of receivers
+  subject: "Otp from neighbours", // Subject line
+  text: "Hello world?", // plain text body
+  html: `<p>Your otp for neighbours login is ${user_.verification.otp}</p>`, // html body
+});
+console.log("Message sent: %s", info.messageId);
+// Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+// Preview only available when sending through an Ethereal account
+console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
         // console.log(user_)
       
       //   let transporter = nodemailer.createTransport({
@@ -135,6 +194,7 @@ exports.SignIn = async function (req, res) {
       res.status(401).json({ message: "Email id does not exists" });
     }
   } catch (err) {
+    console.log(err)
     res.status(400).json({ message: "Error occured" });
   }
 };
